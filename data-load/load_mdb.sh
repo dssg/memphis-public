@@ -1,3 +1,4 @@
+#!/bin/bash
 # load files from an MDB into Postgres
 # Usage: HOST=database_host USER=database_user DB=database_name load_mdb.sh input.mdb schema
 # You can also set PGPASSWORD if needed, although ~/.pgpass is probably a better alternative
