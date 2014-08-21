@@ -1,0 +1,169 @@
+---
+title: "Matching"
+author: "Matthew Wigginton Conway"
+date: "8/16/2014"
+output: html_document
+---
+
+```{r}
+source('~/memphis/scripts/analysis/domatching.R')
+```
+       
+We run a bunch of matching to try to determine if rehabilitating a house has a significant impact on the 
+values of the homes around it.
+
+First we set some general parameters, namely how many trees to use in random forest proximity matching and what our covariates are.
+
+```{r}
+trees <- 25000
+covariates <- c('logrtotapr', 'age', 'rmbed', 'fixbath', 'sqft', 'count_minor_250', 'count_severe_250', 'count_minor_500', 'count_severe_500', 'blight', 'medianhhinc', 'pctunemployed', 'pctownocc')
+```
+
+# Non-demolition investment
+Does putting a significant investment into a property raise the values of the the properties around it? We match sales around
+blighted homes which received investment between 2008 and 2010 with similar sales within 2 miles, but which are not near blighted homes.
+
+## Post-rehab evaluation
+
+We look to see if there is a treatment effect post-rehab.
+
+### Spatial matching
+
+Match only to homes within 2 miles. We use both propensity and proximity matching.
+
+```{r dev='svg'}
+# propensity score matching
+m <- doMatching(covariates, method='prop', trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching (Savage et al forthcoming)
+m <- doMatching(covariates, trees=trees)
+bal(m[[1]], m[[2]], covariates, matchbalance=F)
+summary(m[[1]])
+
+df <- data.frame(treatment=m[[2]][m[[1]]$index.treated,'parid'], control=m[[2]][m[[1]]$index.control,'parid'])
+write.csv(df, 'spatial.csv', row.names=F)
+```
+
+### Aspatial matching
+
+Match to homes anywhere in the city. The tradeoff between spatial and aspatial matching is that using aspatial matching
+(which is the same as using an infinite radius and spatial matching) allows one to better match on the observed features,
+at the expense of matching on unobserved features. It is assumed that unobserved features follow the First Law of Geography,
+namely that things near each other tend to be similar, so by matching to nearby houses unobserved features should
+be similar.
+
+```{r dev='svg'}
+# propensity score matching
+m <- doMatching(covariates, method='prop', matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+df <- data.frame(treatment=m[[2]][m[[1]]$index.treated,'parid'], control=m[[2]][m[[1]]$index.control,'parid'])
+write.csv(df, 'aspatial.csv', row.names=F)
+```
+
+## Do the same thing before the rehabs occurred
+
+This nonsensical situation would indicate that we messed up.
+
+```{r dev='svg'}
+# spatial
+# propensity score matching
+m <- doMatching(covariates, method='prop', post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# aspatial
+# propensity score matching
+m <- doMatching(covariates, method='prop', post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+```
+
+# Demolitions
+Does demolishing a blighted property affect the property values nearby? We look at data from demolition permits to see. We exclude properties where a demo permit was pulled and another type of building permit was subsequently pulled.
+
+## Post-demolition evaluation
+
+We look to see if there is a treatment effect post-demolition.
+
+### Spatial matching
+
+Match only to homes within 2 miles. We use both propensity and proximity matching.
+
+```{r dev='svg'}
+# propensity score matching
+m <- doMatching(covariates, which='DEM', method='prop', trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching (Savage et al forthcoming)
+m <- doMatching(covariates, which='DEM', trees=trees)
+bal(m[[1]], m[[2]], covariates, matchbalance=F)
+summary(m[[1]])
+```
+
+### Aspatial matching
+
+Match to homes anywhere in the city. The tradeoff between spatial and aspatial matching is that using aspatial matching
+(which is the same as using an infinite radius and spatial matching) allows one to better match on the observed features,
+at the expense of matching on unobserved features. It is assumed that unobserved features follow the First Law of Geography,
+namely that things near each other tend to be similar, so by matching to nearby houses unobserved features should
+be similar.
+
+```{r dev='svg'}
+# propensity score matching
+m <- doMatching(covariates,which='DEM',  method='prop', matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, which='DEM', matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+```
+
+## Do the same thing before the demolitions occurred
+
+This nonsensical situation would indicate that we messed up.
+
+```{r dev='svg'}
+# spatial
+# propensity score matching
+m <- doMatching(covariates, which='DEM', method='prop', post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, which='DEM', post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# aspatial
+# propensity score matching
+m <- doMatching(covariates, method='prop', which='DEM', post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, which='DEM', post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+```
