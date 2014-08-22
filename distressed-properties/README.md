@@ -1,0 +1,4 @@
+Our goal in this study was to estimate the risk that each residential property in Memphis is distressed using administrative data collected by the City of Memphis and Shelby County. While University of Memphis Center for Community Building and Neighborhood Action conducted a survey of distressed properties from 2008-2010, the results of that survey are no longer reliable. Since the time and money required to conduct another survey are prohibitively high, we utilized data science to gain similar results through a faster and cheaper method.
+
+Using the survey results along with data about each home in 2008 as our training set, we trained a random forest classifier to estimate the probability that each home in 2011, 2012, and 2012 were distressed based on data from those years. Once the same data is collected for 2014 and future years, we can run the same model to identify likely distressed properties.
+
