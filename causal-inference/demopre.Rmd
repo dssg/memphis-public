@@ -23,7 +23,7 @@ covariates <- c('logrtotapr', 'age', 'rmbed', 'fixbath', 'sqft','count_minor_250
 
 This nonsensical situation would indicate that we messed up.
 
-```{r dev='png'}
+```{r  demopre, dev='png'}
 # spatial
 # propensity score matching
 m <- doMatching(covariates, which='DEM', method='prop', post=F, trees=trees)

@@ -30,7 +30,7 @@ We look to see if there is a treatment effect post-demolition.
 
 Match only to homes within 2 miles. We use both propensity and proximity matching.
 
-```{r dev='png'}
+```{r demopostSpat, dev='png'}
 # propensity score matching
 m <- doMatching(covariates, which='DEM', method='prop', trees=trees)
 bal(m[[1]], m[[2]], covariates)
@@ -50,7 +50,7 @@ at the expense of matching on unobserved features. It is assumed that unobserved
 namely that things near each other tend to be similar, so by matching to nearby houses unobserved features should
 be similar.
 
-```{r dev='png'}
+```{r demopostAspat, dev='png'}
 # propensity score matching
 m <- doMatching(covariates,which='DEM',  method='prop', matches=NULL, trees=trees)
 bal(m[[1]], m[[2]], covariates)
