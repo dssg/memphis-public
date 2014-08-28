@@ -1,0 +1,48 @@
+---
+title: "Untitled"
+author: "Matthew Wigginton Conway"
+date: "8/22/2014"
+output: html_document
+---
+
+```{r}
+source('~/memphis/scripts/analysis/domatching.R')
+```
+       
+We run a bunch of matching to try to determine if rehabilitating a house has a significant impact on the 
+values of the homes around it.
+
+First we set some general parameters, namely how many trees to use in random forest proximity matching and what our covariates are.
+
+```{r}
+trees <- 25000
+covariates <- c('logrtotapr', 'age', 'rmbed', 'fixbath', 'sqft','count_minor_250', 'count_severe_250',  'count_minor_500', 'count_severe_500', 'blight', 'medianhhinc', 'pctunemployed', 'pctownocc')
+```
+
+## Do the same thing before the demolitions occurred
+
+This nonsensical situation would indicate that we messed up.
+
+```{r dev='png'}
+# spatial
+# propensity score matching
+m <- doMatching(covariates, which='DEM', method='prop', post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, which='DEM', post=F, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# aspatial
+# propensity score matching
+m <- doMatching(covariates, method='prop', which='DEM', post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+
+# proximity score matching
+m <- doMatching(covariates, which='DEM', post=F, matches=NULL, trees=trees)
+bal(m[[1]], m[[2]], covariates)
+summary(m[[1]])
+```
