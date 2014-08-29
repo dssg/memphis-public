@@ -4,7 +4,7 @@
 # Pull down our features from the database
 library(RPostgreSQL)
 dbdrv <- dbDriver('PostgreSQL')
-con <- dbConnect(dbdrv, 'localhost', port='5431', user='memphis', password='P4c3l10')
+con <- dbConnect(dbdrv, 'localhost',  user='xxx', password='xxx')
 
 qfile = '~/Documents/Yale/Summer 2014/DSSG/memphis/scripts/data_load/app-data-2013.sql'
 query = readChar(qfile,file.info(qfile)$size)

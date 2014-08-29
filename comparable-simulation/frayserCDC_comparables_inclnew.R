@@ -7,7 +7,7 @@ setwd('<directory>')
 ## Get data from database ##
 drv <- dbDriver("PostgreSQL")
 # run this over an ssh tunnel
-con <- dbConnect(drv, 'localhost', port='5431', user='memphis', password='P4c3l10')
+con <- dbConnect(drv, 'localhost',  user='xxx', password='xxx')
 
 
 #Get pools, porches, patios
