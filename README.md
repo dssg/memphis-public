@@ -11,6 +11,7 @@ The project consisted primarily of four components:
 
 We worked on a few other things as well:
 
+- A comprehensive database about properties in Memphis, documented [here](https://www.github.com/dssg/memphis-public/wiki/DatabaseSchema)
 - An evaluation of land productivity (tax per unit area less cost per unit area), in the `land-productivity` folder
 - Scripts to load various types of data to our Postgres database (in the `data-load` folder)
 
