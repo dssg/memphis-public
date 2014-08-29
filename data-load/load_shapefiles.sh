@@ -1,7 +1,8 @@
 #!/bin/sh
-# Load all the shapefiles in the data directory.
-# Usage: HOST=database_host USER=database_user DB=database_name SCHEMA=schema load_shapefiles.sh [directory]
-# You can also set PGPASSWORD if needed, although ~/.pgpass is probably a better alternative
+# Load all the shapefiles in a given directory to PostGIS,
+# assuming a Tennessee State Plane projection
+
+# Usage: HOST=... USER=... DB=... SCHEMA=... load_shapefiles.sh path/to/directory
 
 if [ -n "$1" ]; then
   SHPFILE_DIR="$1"
