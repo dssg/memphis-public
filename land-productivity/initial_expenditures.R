@@ -14,7 +14,7 @@ library(RColorBrewer)
 setwd('~/projects/memphis')
 # census block
 drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, host="dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com", user="memphis", password="memphis", dbname="memphis", port="5432")
+con <- dbConnect(drv, host="dssgsummer2014postgres", user="*****", password="*****", dbname="*****", port="5432")
 
 #Total street length by census tract
 rs <- dbSendQuery(con, "SELECT clipped.tract, sum(st_length(clipped_geom)) as tot_st_length
@@ -78,8 +78,6 @@ rs <- dbSendQuery(con, "select t.geo_id2 as tract, sum(partax.rtotasmt) as asmt 
 	group by t.geo_id2;");	
 taxes <- fetch(rs, n = -1); dbClearResult(rs)  
 
-#Total taxes are 534383412 - seems high? They're only supposed to account for 50% of revenues, right? 
-
 dbDisconnect(con) # Close the connection
 
 #Merge into one frame
@@ -116,7 +114,7 @@ dat$exppp = dat$totexp / dat$pop
 dat[dat$pop < 500,'exppp'] = NA
 dat$exparea = dat$totexp / dat$area	
 
-#Raw net, though this doesn't make that much sense arithmetically
+#Raw net
 dat$net = dat$taxes - dat$totexp
 dat[!dat$incity,'net'] = 0
 
@@ -128,11 +126,6 @@ dat$net_difpaid = dat$taxes - dat$totexp * (sum(dat[dat$incity, 'taxes'])/sum(da
 dat$net_samedist = dat$taxes * sum(dat$totexp)/sum(dat$taxes) - dat$totexp
 
 write.csv(dat,'~/projects/memphis/scripts/analysis/output/tract_exp.csv', row.names = F)
-
-
-
-
-
 
 
 
