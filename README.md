@@ -7,7 +7,7 @@ The project consisted primarily of four components:
 - A component to identify distressed properties, based on administrative data (in the `distressed-properties` folder)
 - A component to simulate how rehabilitations effect change in property tax appraisals (in the `comparable-simulation` folder)
 - A component to evaluate how rehabilitations are correlated with and have effected change in sale value of homes (in the `radial-binning` and `causal-inference` folders)
-- A market value analysis, clustering Census tracts into areas with similar demographic and market characteristics, for policy development and use as a feature in other models (in the `market-value-analysis` folder)
+- A market value analysis, clustering Census tracts into areas with similar demographic and market characteristics, for policy development and use as a feature in other models (in the `MVA` folder)
 
 We worked on a few other things as well:
 
